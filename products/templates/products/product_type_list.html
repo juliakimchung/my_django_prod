@@ -1,0 +1,16 @@
+{% extends 'products/index.html' %}
+{% block content %}
+
+{% if product_type_list %}
+    <ul>
+    {% for product_type in product_type_list %}
+        <li><a href="/product-type/{{product_type_id}}/">Label: {{product_type.label}}</a></li>
+       
+        <!-- <li>User: {{product.user}}</li> -->
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>NO product-types are available.</p>
+
+{%endif%}
+{%endblock%}

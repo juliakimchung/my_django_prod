@@ -1,0 +1,9 @@
+{%extends 'products/index.html'%}
+{%block content%}
+<form class="" action="{%url 'products_app:product_type' %}" method="post">
+    {%csrf_token %}
+    <input type='text' name='label' value='' placeholder='label'>
+    
+    <button type='submit'>Submit</button>
+</form>
+{%endblock%}
