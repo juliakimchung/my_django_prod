@@ -5,7 +5,7 @@ from django.utils import timezone
 class Customer(models.Model):
     """
     The customers table integrates the Django User model and maintains relevant information for a customer
-    Author: Dani Adkins
+    
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=200)
@@ -16,8 +16,8 @@ class Customer(models.Model):
     class Meta:
         verbose_name_plural = "Customers"
 
-    def __str__(self):
-    return '{}'.format(self.user.username)
+        def __str__(self):
+            return '{}'.format(self.user.username)
 
 
 
@@ -64,7 +64,7 @@ class Product(models.Model):
     description = models.TextField(max_length=300, default='')
     quantity = models.IntegerField()
     product_type =models.ForeignKey("ProductType", related_name="products", on_delete=models.CASCADE)
-    customer =models.ForeignKey(User, related_name="products", on_delete=models.CASCADE)
+    customer =models.ForeignKey('Customer', related_name="products", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

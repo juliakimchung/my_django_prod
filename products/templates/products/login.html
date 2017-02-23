@@ -1,6 +1,6 @@
 {%extends 'products/index.html'%}
 {%block content%}
-<form class = "" action="{url products_app:list}" method="post">
+<form class = "" action="{%url 'products_app:login' %}" method="post">
 	{%csrf_token%}
 	<input type="text" name='username' value="" placeholder="Enter username">
 	<input type="text" name='password' value="" placeholder="Enter password">
