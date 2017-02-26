@@ -63,8 +63,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=20, decimal_places=2)
     description = models.TextField(max_length=300, default='')
     quantity = models.IntegerField()
-    product_type =models.ForeignKey("ProductType", related_name="products", on_delete=models.CASCADE)
-    customer =models.ForeignKey('Customer', related_name="products", on_delete=models.CASCADE)
+    product_type =models.ForeignKey(ProductType, on_delete=models.CASCADE, blank=True, unique=True)
+    customer =models.ForeignKey(Customer,  on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -92,7 +92,7 @@ class PaymentType(models.Model):
     account_number = models.CharField(max_length=100, blank=True, default="")
     cvv_number = models.CharField(max_length=4, blank=True, default="")
     expiration_date = models.DateField()
-    customer = models.ForeignKey(User, related_name='payment_types', on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer,  on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -120,9 +120,9 @@ class Orders(models.Model):
     """
     active = models.BooleanField(default=True)
     created =models.DateTimeField(auto_now_add=True)
-    customer =models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
-    product =models.ManyToManyField(Product)
-    payment_type = models.ForeignKey("PaymentType", related_name="orders", on_delete=models.CASCADE)
+    customer =models.ForeignKey(Customer, related_name='orders', on_delete=models.CASCADE)
+    product =models.ManyToManyField(Product, related_name='orders')
+    payment_type = models.ForeignKey(PaymentType,  related_name='orders',on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.id)

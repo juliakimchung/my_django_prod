@@ -1,0 +1,20 @@
+{% extends 'products/index.html' %}
+{% block content %}
+
+{% if product_list %}
+    <ul>
+    {% for item in instance %}
+        <li><a href="/products/{{product_id}}/">Name: {{item.name}}</a></li>
+        <li>Price: {{item.price}}</li>
+        <li>Desciption: {{item.description}}</li>
+        <li>Quantity: {{item.price}}</li>
+        <li>Product_Type: {{item.product_type}}</li>
+
+        <!-- <li>User: {{product.user}}</li> -->
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>NO products are available.</p>
+
+{%endif%}
+{%endblock%}

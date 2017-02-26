@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import *
 from django.views.generic.base import TemplateView
@@ -11,20 +11,23 @@ def home(request):
     product_list = Product.objects.order_by('created')[:20]
     context = {'product_list': product_list,}
     return render(request, 'products/product_list.html', context)
-def create_product(request):
-    data = request.POST
-    # product_type = ProductType.objects.get(label=data['label'])
-    Product.objects.create(
-        name=data['name'],
-        price=data['price'],
-        description=data['description'],
-        quantity=data['quantity'],
-        # product_type =product_type['label'],
-        customer=request.user)
-    return HttpResponseRedirect(redirect_to='/products/list')
+class CreateProduct(TemplateView):
+    template_name = 'products/create_product.html'
 
-def template_to_create(request):
-    return render(request, 'products/create_product.html')
+    def post(self, request):
+        data = request.POST
+        product_type = ProductType.objects.get_or_create(label=data['label'])
+        Product.objects.create(
+            name=data['name'],
+            price=data['price'],
+            description=data['description'],
+            quantity=data['quantity'],
+            product_type = product_type[0],
+            customer= request.user
+            
+            )
+        return HttpResponseRedirect(redirect_to='/products/list')
+
 
 def product_type(request):
     product_type_list = ProductType.objects.order_by('label')[:20]
@@ -32,17 +35,28 @@ def product_type(request):
     return render(request, 'products/product_type_list.html', context)
 
 
-def create_product_type(request):
-    data = request.POST
-    ProductType.objects.create(
-        label=data['label'])
+class  CreateProductType(TemplateView):
 
-    return HttpResponseRedirect(redirect_to='/products/product_type_list')
+    template_name = 'products/create_product_type.html'
 
+    def post(self, request):
+        data = request.POST
+        ProductType.objects.create(
+            label=data['label'])
 
-def template_to_create_product_type(request):
-    return render(request, 'products/create_product_type.html')
+        return HttpResponseRedirect(redirect_to='/products/product_type_list')
 
+class ProductDetail(TemplateView):
+    template_name = 'products/product_detail.html'
+
+    def post_detail(request, pk):
+        instance = Product.objects.get_object_or_404(Product, id=pk)
+        context = {
+        "title":instance.title,
+        'instance': instance
+        }
+
+        retrun(request, 'product_detail.html', context)
 class Register(TemplateView):
     template_name = 'products/register.html'
 
